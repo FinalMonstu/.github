@@ -53,6 +53,10 @@
 2. 서버 내부 캐시 조회 & DB 조회가 비동기 방식으로 동시에 실행 (모두 실패 시 3단계 진행)
 3. 외부 번역 API 호출 후 결과 전달 (실패 시 에러 전달)
 
+2단계의 서버 캐시 조회와 DB 조회는 I/O 대기가 발생하는 작업입니다. **CompletableFuture**와 **Virtual Thread**를 활용해 이 두 작업을 동시에(concurrently) 실행하도록 구현했습니다.
+
+이를 통해, 순차적으로 실행했을 때(캐시 대기 + DB 대기) 발생할 지연 시간을 **둘 중 더 오래 걸리는 작업의 시간**만큼으로 단축하여, 사용자의 응답 지연 시간을 최소화했습니다.
+
 [I/O pool 소스 코드 보기](https://github.com/FinalMonstu/FINAL_MONSTU_back/blob/main/src/main/java/com/icetea/MonStu/async/AsyncConfig.java)
 
 [CompletableFuture 사 소스 코드 보기](https://github.com/FinalMonstu/FINAL_MONSTU_back/blob/main/src/main/java/com/icetea/MonStu/service/TranslationService.java)
