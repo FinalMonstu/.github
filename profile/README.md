@@ -13,6 +13,7 @@
 [![YouTube Video Thumbnail](https://img.youtube.com/vi/CH2E0r3U4CA/hqdefault.jpg)](https://www.youtube.com/watch?v=CH2E0r3U4CA)
 
 ### 🚩 Develop Log Blog: [tistory.com](https://code-is-code.tistory.com/)
+
 ---
 
 ### 📖 소개
@@ -25,6 +26,81 @@
 
 ---
 
+### 🛠️ 사용 기술 스택
+
+- **Frontend**: React, Material-UI (MUI)
+- **Backend**: Spring Boot 3.4.4
+- **DB**: MySQL 8.3
+- **AI API**: Google Translation API
+- **Auth & Security**: JWT, Spring Security
+- **ORM & Query**: JPA, QueryDSL
+
+---
+
+### 📌 [핵심 성과] 번역 API "Thundering Herd" 문제 해결
+
+[문제 인지]
+
+프로젝트의 핵심 기능인 번역 API에서, **동일한 단어**에 대한 **동시 요청**이 몰릴 경우(Thundering Herd) 심각한 성능 및 데이터 정합성 문제가 발생함을 JMeter 테스트로 확인
+
+
+
+[해결]
+
+"Key별 락" 패턴과 **"가상 스레드(Virtual Threads)"**를 도입하여 해결
+
+
+<br/>
+[문제 상황 : 중복 호출 및 DB 중복 저장 (Duplicate)]
+
+JMeter를 통해 "100명의 사용자가 'apple'을 동시에 요청"하는 시나리오로 테스트한 결과, 단순 동기 방식(Semaphore만 사용)은 DuplicateKeyException을 발생시키며 실패
+
+원인: Semaphore를 통과한 20개의 스레드가 동시에 "apple" API를 중복 호출하고, DB에 20번 중복 저장을 시도
+
+<img width="1280" height="61" alt="image" src="https://github.com/user-attachments/assets/8bac8464-93b3-4a54-8847-65699bbb734b" />
+<img width="1280" height="35" alt="image" src="https://github.com/user-attachments/assets/f921549a-fd6d-4c13-8c39-7f1332bbc6ad" />
+
+<br/>
+<br/>
+[해결 상세 : "Key별 락(Per-Key Lock)"을 통한 요청 병합]
+
+1. "Global Lock" 대신, **ConcurrentMap**과 **CompletableFuture**를 "작업 티켓"으로 활용하는 "Key별 락" 패턴을 도입
+2. Virtual_thread 적용, 스레드 블로킹 비용 절약
+
+
+<br/>
+[해결 후 코드 테스트 결과 - 성공]
+
+<img width="1280" height="53" alt="image" src="https://github.com/user-attachments/assets/ece97d28-d0c0-483e-909e-e0a18c730bce" />
+
+<br/>
+<br/>
+[해결 원리]
+
+<img width="1280" height="649" alt="image" src="https://github.com/user-attachments/assets/09cd9a8e-d6a9-4dd6-8c87-70f4cc108142" />
+
+
+1. "게이트키퍼" (computeIfAbsent):
+
+ - 100개의 "apple" 요청이 와도, 단 1개의 스레드만 람다(티켓 발권소)에 진입
+
+2. "작업 티켓 발권" (supplyAsync):
+
+- "승자" 스레드가 외부 API 호출 작업을 "별도의 가상 스레드"에게 비동기로 넘기고, **"작업 티켓(CompletableFuture)"**을 맵에 저장 후 락을 해제
+
+3. "결과 전파" (future.get()):
+
+- 100개 스레드 모두 "동일한 티켓"을 들고 future.get() (결과 대기실)에서 멈춰서(Blocking) 대기 "작업자 스레드"가 결과를 티켓에 .complete()하면, 100개 스레드 모두 깨어나 "동일한 결과"를 공유
+
+
+추가 효과 (회복탄력성):
+
+- .orTimeout()을 설정하여, 외부 API 지연 시 "연쇄 장애(Cascading Failure)"를 방지
+
+[소스 코드 보기](https://github.com/FinalMonstu/FINAL_MONSTU_back/blob/main/src/main/java/com/icetea/MonStu/service/TranslationService.java)
+
+---
+
 ### 📖 구성
 <img width="996" height="812" alt="image" src="https://github.com/user-attachments/assets/97ffd599-aff8-4c2c-b1dc-7194addbe86f" />
 
@@ -32,7 +108,6 @@
 
 ### 📖 ERD 설계
 <img width="1760" height="781" alt="image" src="https://github.com/user-attachments/assets/3714d35a-4cc9-4521-8615-0af6057c80e0" />
-
 
 ---
 
@@ -45,21 +120,17 @@
 
 ### 📌핵심기술 - 번역 기능   
 <img width="564" height="550" alt="image" src="https://github.com/user-attachments/assets/227f205f-492a-4fc9-a197-a57d92b9a2e8" />
-<img width="564" height="130" alt="image" src="https://github.com/user-attachments/assets/cd9ba2f4-9d75-4a81-99f7-f2a8f5c3de5a" />
+<img width="564" height="198" alt="화면 캡처 2025-11-03 222545" src="https://github.com/user-attachments/assets/9f5b1217-395f-434a-bc8a-c73bfc2fede2" />
 
-- 사용 기술 : CompletableFuture, JPA, Virtual Thread
-- 기능 설명 : 사용자가 번역 요청 시 아래의 3단계를 걸쳐 작동
+- 사용 기술 : CompletableFuture, JPA, Virtual Thread, ConcurrentMap
+- 기능 설명 : 사용자가 번역 요청 시 아래의 4단계를 걸쳐 작동
 1. 클라이언트 내부 캐시를 조회 (실패 시 2단계 진행)
-2. 서버 내부 캐시 조회 & DB 조회가 비동기 방식으로 동시에 실행 (모두 실패 시 3단계 진행)
-3. 외부 번역 API 호출 후 결과 전달 (실패 시 에러 전달)
+2. 서버 내부 캐시 조회 (실패 시 3단계 진행)
+3. DB 조회 (실패 시 4단계 진행)
+4. 외부 번역 API 호출 후 결과 전달 (실패 시 에러 전달)
 
-2단계의 서버 캐시 조회와 DB 조회는 I/O 대기가 발생하는 작업입니다. **CompletableFuture**와 **Virtual Thread**를 활용해 이 두 작업을 동시에(concurrently) 실행하도록 구현했습니다.
-
-이를 통해, 순차적으로 실행했을 때(캐시 대기 + DB 대기) 발생할 지연 시간을 **둘 중 더 오래 걸리는 작업의 시간**만큼으로 단축하여, 사용자의 응답 지연 시간을 최소화했습니다.
-
-[I/O pool 소스 코드 보기](https://github.com/FinalMonstu/FINAL_MONSTU_back/blob/main/src/main/java/com/icetea/MonStu/async/AsyncConfig.java)
-
-[CompletableFuture 사 소스 코드 보기](https://github.com/FinalMonstu/FINAL_MONSTU_back/blob/main/src/main/java/com/icetea/MonStu/service/TranslationService.java)
+Semaphore로 외부 API 요청을 조절하고
+CompletableFuture와 ConcurrentMap를 활용하여 **중복 호출** 문제를 해결
 
 ---
 
@@ -78,20 +149,11 @@
 
 ---
 
-### 🛠️ 사용 기술 스택
-
-- **Frontend**: React, Material-UI (MUI)
-- **Backend**: Spring Boot 3.4.4
-- **DB**: MySQL 8.3
-- **AI API**: Google Translation API
-- **Auth & Security**: JWT, Spring Security
-- **ORM & Query**: JPA, QueryDSL
-
 ### ⚙️ 배포 환경
 
 - OS: Ubuntu Linux
 - Domain : Cloudflare
-- Hardware: Laptop
+- Hardware: 로컬 개발 서버
 
 ---
 
@@ -99,27 +161,8 @@
 
 - RESTful API 설계 및 JPA 기반 CRUD 기능 구현
 - QueryDSL을 활용한 동적 필터링 검색 기능 개발
-- 캐싱 적용으로 AI 번역 속도 개선 (평균 140ms → 129ms)
-- CompletableFuture와 I/O pool을 활용한 비동기 방식으로 외부 번역 API 기능 속도 개선 (380ms → 180ms)
-
----
-
-### ✅ 성능·신뢰성 개선
-
-- 3단계 조회 파이프라인: 캐시 → DB → 외부 API, 동시 실행 후 ‘첫 성공 결과’ 반환(캐시/DB 경쟁 실행으로 지연 최소화)
-
-- 결과 캐싱 & 영속화: 외부 API 결과를 캐시 저장 + DB 저장으로 재사용·비용 절감
-
-### ✅ 서버 스레드 효율성 분석
-
-**사용 패키지 :** Vitual VM + JMeter
-
-**시나리오 :** 30명의 사용자가 '동시에' '동일한' 단어를 요청
-
-<img width="440" height="249" alt="image" src="https://github.com/user-attachments/assets/302488ba-7bb8-402b-ade5-10654061b02a" />
-<img width="440" height="249" alt="image" src="https://github.com/user-attachments/assets/2e01de15-c0e3-4ab5-8bc5-133126426a6c" />
-
-결과 : 실험 결과, 제안하는 비동기 방식은 동기 방식 대비 약 15% 적은 스레드 자원을 사용
+- 캐싱 적용으로 AI 번역 속도 개선 
+- CompletableFuture와 ConcurrentMap를 활용하여 **중복 호출** 방지
 
 ---
 
