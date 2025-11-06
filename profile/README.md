@@ -80,17 +80,15 @@ JMeter를 통해 "100명의 사용자가 'apple'을 동시에 요청"하는 시�
 <img width="1280" height="649" alt="image" src="https://github.com/user-attachments/assets/09cd9a8e-d6a9-4dd6-8c87-70f4cc108142" />
 
 
-1. "게이트키퍼" (computeIfAbsent):
+1. "깃발 세우기" (computeIfAbsent):
+ 
+- 500개의 "apple" 요청이 오면 선두 스레드가 ConcurrentMap에 진입
 
- - 100개의 "apple" 요청이 와도, 단 1개의 스레드만 람다(티켓 발권소)에 진입
+2. "진동벨 남기기" (supplyAsync):
+   
+- 선두 스레드가 외부 API호출 작업을 Virtual Thread에게 비동기로 넘기고 진동벨(CompletableFuture)을 앱에 저장 후 락을 해제
 
-2. "작업 티켓 발권" (supplyAsync):
-
-- "승자" 스레드가 외부 API 호출 작업을 "별도의 가상 스레드"에게 비동기로 넘기고, **"작업 티켓(CompletableFuture)"**을 맵에 저장 후 락을 해제
-
-3. "결과 전파" (future.get()):
-
-- 100개 스레드 모두 "동일한 티켓"을 들고 future.get() (결과 대기실)에서 멈춰서(Blocking) 대기 "작업자 스레드"가 결과를 티켓에 .complete()하면, 100개 스레드 모두 깨어나 "동일한 결과"를 공유
+3. 499개의 스레드 모두 동일한 진동벨을 들고  future.get()에서 대기, "선두 스레드"가 결과를 .complete()하여 대기 중인 스레드에게 동일한 결과를 공유
 
 
 추가 효과 (회복탄력성):
