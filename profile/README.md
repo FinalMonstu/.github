@@ -77,18 +77,19 @@ JMeter를 통해 "100명의 사용자가 'apple'을 동시에 요청"하는 시�
 <br/>
 [해결 원리]
 
-<img width="1280" height="649" alt="image" src="https://github.com/user-attachments/assets/09cd9a8e-d6a9-4dd6-8c87-70f4cc108142" />
+<img width="1817" height="919" alt="번역기능_문제해결" src="https://github.com/user-attachments/assets/c86e9486-fcfb-4eec-82e4-d38185287171" />
+
 
 
 1. "깃발 세우기" (computeIfAbsent):
  
-- 500개의 "apple" 요청이 오면 선두 스레드가 ConcurrentMap에 진입
+- 100개의 "apple" 요청이 오면 선두 스레드가 ConcurrentMap에 진입
 
 2. "진동벨 남기기" (supplyAsync):
    
 - 선두 스레드가 외부 API호출 작업을 Virtual Thread에게 비동기로 넘기고 진동벨(CompletableFuture)을 앱에 저장 후 락을 해제
 
-3. 499개의 스레드 모두 동일한 진동벨을 들고  future.get()에서 대기, "선두 스레드"가 결과를 .complete()하여 대기 중인 스레드에게 동일한 결과를 공유
+3. 99개의 스레드 모두 동일한 진동벨을 들고  future.get()에서 대기, "선두 스레드"가 결과를 .complete()하여 대기 중인 스레드에게 동일한 결과를 공유
 
 
 추가 효과 (회복탄력성):
