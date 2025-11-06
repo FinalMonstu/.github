@@ -87,7 +87,7 @@ JMeter를 통해 "100명의 사용자가 'apple'을 동시에 요청"하는 시�
 
 2. "진동벨 남기기" (supplyAsync):
    
-- 선두 스레드가 외부 API호출 작업을 Virtual Thread에게 비동기로 넘기고 진동벨(CompletableFuture)을 앱에 저장 후 락을 해제
+- 선두 스레드가 외부 API호출 작업을 Virtual Thread에게 비동기로 넘기고 진동벨(CompletableFuture)을 Map에 저장 후 락을 해제
 
 3. 99개의 스레드 모두 동일한 진동벨을 들고  future.get()에서 대기, "선두 스레드"가 결과를 .complete()하여 대기 중인 스레드에게 동일한 결과를 공유
 
@@ -101,7 +101,7 @@ JMeter를 통해 "100명의 사용자가 'apple'을 동시에 요청"하는 시�
 ---
 
 ### 📖 구성
-<img width="996" height="812" alt="image" src="https://github.com/user-attachments/assets/97ffd599-aff8-4c2c-b1dc-7194addbe86f" />
+<img width="1205" height="1016" alt="화면 캡처 2025-11-07 042915" src="https://github.com/user-attachments/assets/383c9f3e-a042-40fa-860d-73b6d8f1016d" />
 
 ---
 
