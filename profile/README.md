@@ -12,6 +12,7 @@
 ### 💿 Demo Video:
 [![YouTube Video Thumbnail](https://img.youtube.com/vi/CH2E0r3U4CA/hqdefault.jpg)](https://www.youtube.com/watch?v=CH2E0r3U4CA)
 
+### ⚡ Live Site : [MonStu](https://monstu.win/)
 ### 🚩 Develop Log Blog: [tistory.com](https://code-is-code.tistory.com/)
 
 ---
@@ -80,16 +81,17 @@ JMeter를 통해 "100명의 사용자가 'apple'을 동시에 요청"하는 시�
 <img width="1817" height="919" alt="번역기능_문제해결" src="https://github.com/user-attachments/assets/c86e9486-fcfb-4eec-82e4-d38185287171" />
 
 
+1."깃발 세우기" (computeIfAbsent):
 
-1. "깃발 세우기" (computeIfAbsent):
+ 100개의 "apple" 요청, 선두 스레드가 ConcurrentMap에 진입
  
-- 100개의 "apple" 요청이 오면 선두 스레드가 ConcurrentMap에 진입
+2."진동벨 남기기" (supplyAsync):
 
-2. "진동벨 남기기" (supplyAsync):
-   
-- 선두 스레드가 외부 API호출 작업을 Virtual Thread에게 비동기로 넘기고 진동벨(CompletableFuture)을 Map에 저장 후 락을 해제
+ 선두 스레드가 supplyAsync를 호출하여, '진동벨(CompletetableFuture)'을 Map에 즉시 저장
 
-3. 99개의 스레드 모두 동일한 진동벨을 들고  future.get()에서 대기, "선두 스레드"가 결과를 .complete()하여 대기 중인 스레드에게 동일한 결과를 공유
+3.결과 공유 (complete):
+
+ 99개의 스레드 모두 동일한 진동벨을 들고 future.get()에서 대기, "선두 스레드"가 결과를 .complete()하여 대기 중인 스레드에게 동일한 결과를 공유
 
 
 추가 효과 (회복탄력성):
@@ -133,13 +135,14 @@ CompletableFuture와 ConcurrentMap를 활용하여 **중복 호출** 문제를 �
 
 ---
 
-### 📌핵심기술 - 관리자 게시물, 사용자 관리 기능  
-<img width="432" height="246" alt="image" src="https://github.com/user-attachments/assets/cd68a90e-363c-47ca-bba1-966b5f91f967" />
-<img width="428" height="248" alt="image" src="https://github.com/user-attachments/assets/cc9db796-471f-439d-9813-7c702c49b6de" />
-<img width="860" height="336" alt="image" src="https://github.com/user-attachments/assets/f8d8b7b2-fd74-4ac1-8967-18938170b88f" />
+### 📌핵심기술 - (관리자) 게시물, 사용자 동적 필터링 기능 
+<img width="408" height="248" alt="image" src="https://github.com/user-attachments/assets/cd68a90e-363c-47ca-bba1-966b5f91f967" />
+<img width="408" height="248" alt="image" src="https://github.com/user-attachments/assets/cc9db796-471f-439d-9813-7c702c49b6de" />
+<img width="816" height="336" alt="image" src="https://github.com/user-attachments/assets/f8d8b7b2-fd74-4ac1-8967-18938170b88f" />
 
 - 사용 기술 : JPA, QueryDSL, React MUI
-- 기능 설명 : 정보를 필터링 조회 후 화면에 표시
+- 기능 설명 : 전달 받은 필터링 조건에 대하여 동적 쿼리문을 생성/조회 후 화면에 표시
+ 
 1. 요청 받은 조건을 조합하여 QueryDSL로 쿼리를 생성
 2. 쿼리를 전달 받아 JPA를 통해 DB 조회
 3. 조회된 정보를 사용자에게 전달, MUI를 사용하여 깔끔한 UI제공
@@ -165,7 +168,7 @@ CompletableFuture와 ConcurrentMap를 활용하여 **중복 호출** 문제를 �
 
 ---
 
-### 🙆‍♂️ 개발자 포트폴리오 [notion.com](https://www.notion.so/248303eae1f280949123e25ee9ad7d04)
+### 🙆‍♂️ 개발자 포트폴리오 [notion.com](https://www.notion.so/PORTFOLIO-19e303eae1f280828d69f4b34a9654a7)
 
 ---
 
