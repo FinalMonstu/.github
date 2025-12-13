@@ -1,3 +1,19 @@
+# 핵심 기능별 코드 바로가기
+
+- 4단계 계층형 조회 전략
+  - [실사용](https://github.com/FinalMonstu/FINAL_MONSTU_back/blob/main/src/main/java/com/icetea/MonStu/translation/application/TranslationService.java)
+- ConcurrentMap과 CompletableFuture를 활용한 요청 별 락 메커니즘 구현
+  - [실사용](https://github.com/FinalMonstu/FINAL_MONSTU_back/blob/main/src/main/java/com/icetea/MonStu/translation/application/TranslationService.java)
+  - [Virtual Thread와 I/O pool 설정](https://github.com/FinalMonstu/FINAL_MONSTU_back/blob/main/src/main/java/com/icetea/MonStu/shared/config/AsyncConfig.java)
+- Semaphore를 도입하여 외부 서비스 장애 전파 방지
+  - [실사용](https://github.com/FinalMonstu/FINAL_MONSTU_back/blob/main/src/main/java/com/icetea/MonStu/translation/application/TranslationService.java)
+  - [편의 메서드](https://github.com/FinalMonstu/FINAL_MONSTU_back/blob/main/src/main/java/com/icetea/MonStu/shared/async/SemaphoreUtils.java)
+- QueryDsl을 이용한 동적 필터링 검색 기능
+  - [조건문 생성](https://github.com/FinalMonstu/FINAL_MONSTU_back/blob/main/src/main/java/com/icetea/MonStu/post/repository/support/PostPredicateFactory.java)
+  - [쿼리 생성](https://github.com/FinalMonstu/FINAL_MONSTU_back/blob/main/src/main/java/com/icetea/MonStu/post/repository/PostRepositoryImpl.java)
+
+---
+
 # MonStu 다국어 학습 플랫폼
 요약: AI 보조 영어 학습 웹 애플리케이션
 
