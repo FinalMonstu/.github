@@ -1,5 +1,11 @@
 # 핵심 기능별 코드 바로가기
 
+- Controller 클래스 ( Restful API )
+  - [실사용](https://github.com/FinalMonstu/FINAL_MONSTU_back/blob/main/src/main/java/com/icetea/MonStu/post/api/v2/PostController.java)
+- JPA 연관관계 설정
+  - [Post (many) Entity](https://github.com/FinalMonstu/FINAL_MONSTU_back/blob/main/src/main/java/com/icetea/MonStu/post/domain/Post.java)
+  - [Member (one) Entity](https://github.com/FinalMonstu/FINAL_MONSTU_back/blob/main/src/main/java/com/icetea/MonStu/member/domain/Member.java)
+
 - 4단계 계층형 조회 전략
   - [실사용](https://github.com/FinalMonstu/FINAL_MONSTU_back/blob/main/src/main/java/com/icetea/MonStu/translation/application/TranslationService.java)
 - ConcurrentMap과 CompletableFuture를 활용한 요청 별 락 메커니즘 구현
