@@ -17,7 +17,7 @@
 # MonStu 다국어 학습 플랫폼
 요약: AI 보조 영어 학습 웹 애플리케이션
 
-개발 기간: "2025.03 ~ 08"
+개발 기간: "2025.03 ~ 
 
 핵심 기술 스택: 
 &nbsp; Java+Spring Boot, MySQL, React, JPA
@@ -118,13 +118,13 @@ JMeter를 통해 "100명의 사용자가 'apple'을 동시에 요청"하는 시�
 
 ---
 
-### 📖 구성
-<img width="1205" height="1016" alt="화면 캡처 2025-11-07 042915" src="https://github.com/user-attachments/assets/383c9f3e-a042-40fa-860d-73b6d8f1016d" />
+### 📖 아키텍쳐
+<img width="1107" height="487" alt="image" src="https://github.com/user-attachments/assets/d82c3dad-b2ac-4531-9962-b2f1dea73093" />
 
 ---
 
 ### 📖 ERD 설계
-<img width="1760" height="781" alt="image" src="https://github.com/user-attachments/assets/3714d35a-4cc9-4521-8615-0af6057c80e0" />
+<img width="1728" height="707" alt="image" src="https://github.com/user-attachments/assets/c34d0aac-219d-4481-af4d-4a8827cb3852" />
 
 ---
 
@@ -169,9 +169,11 @@ CompletableFuture와 ConcurrentMap를 활용하여 **중복 호출** 문제를 �
 
 ### ⚙️ 배포 환경
 
-- OS: Ubuntu Linux
-- Domain : Cloudflare
-- Hardware: 로컬 개발 서버
+Compute: AWS EC2
+
+Network: Cloudflare Tunnel
+
+Database: AWS RDS(MySQL), MongoDB Atlas, Redis
 
 ---
 
