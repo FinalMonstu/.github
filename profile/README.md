@@ -158,9 +158,10 @@ CompletableFuture와 ConcurrentMap를 활용하여 **중복 호출** 문제를 �
 ---
 
 ### 📌핵심기술 - (관리자) 게시물, 사용자 동적 필터링 기능 
-<img width="408" height="248" alt="image" src="https://github.com/user-attachments/assets/cd68a90e-363c-47ca-bba1-966b5f91f967" />
-<img width="408" height="248" alt="image" src="https://github.com/user-attachments/assets/cc9db796-471f-439d-9813-7c702c49b6de" />
-<img width="816" height="336" alt="image" src="https://github.com/user-attachments/assets/f8d8b7b2-fd74-4ac1-8967-18938170b88f" />
+<img width="358" height="248" alt="image" src="https://github.com/user-attachments/assets/cd68a90e-363c-47ca-bba1-966b5f91f967" />
+<img width="358" height="248" alt="image" src="https://github.com/user-attachments/assets/cc9db796-471f-439d-9813-7c702c49b6de" />
+<img width="673" height="192" alt="image" src="https://github.com/user-attachments/assets/e955bcd0-552c-48be-99e6-66f151c83cbb" />
+
 
 - 사용 기술 : JPA, QueryDSL, React MUI
 - 기능 설명 : 전달 받은 필터링 조건에 대하여 동적 쿼리문을 생성/조회 후 화면에 표시
