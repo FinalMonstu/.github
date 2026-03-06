@@ -34,9 +34,6 @@
 ### 💿 Demo Video:
 [![YouTube Video Thumbnail](https://img.youtube.com/vi/CH2E0r3U4CA/hqdefault.jpg)](https://www.youtube.com/watch?v=CH2E0r3U4CA)
 
-### ⚡ Live Site : [MonStu](https://monstu.win/)
-### 🚩 Develop Log Blog: [tistory.com](https://code-is-code.tistory.com/)
-
 ---
 
 ### 📖 소개
